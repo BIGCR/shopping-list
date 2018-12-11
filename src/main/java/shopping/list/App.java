@@ -13,7 +13,7 @@ public class App {
 
     private void readFromFile() {
         HashMap<String, Fruit> items = new HashMap<>();
-        
+
         try {            
             Files.readAllLines(Paths.get(System.getProperty("user.dir")+"/src/main/resources/items"), StandardCharsets.UTF_8)
                 .forEach(e-> {
@@ -31,15 +31,19 @@ public class App {
                     e.getValue().printData();
                 });
 
-            double totalPrice = items.entrySet()
+            calculateAndDisplayTotal(items);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void calculateAndDisplayTotal(HashMap<String, Fruit> items) {
+        double totalPrice = items.entrySet()
                                     .stream()
                                     .map(e->e.getValue().subTotal)
                                     .mapToDouble(Double::doubleValue)
                                     .sum();
-            
-            System.out.println(String.format("Total Price: $%s", String.format("%.2f", totalPrice)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        
+        System.out.println(String.format("Total Price: $%s", String.format("%.2f", totalPrice)));
     }
 }
