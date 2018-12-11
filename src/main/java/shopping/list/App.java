@@ -3,21 +3,41 @@
  */
 package shopping.list;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets; 
-import java.nio.file.*; 
+import java.nio.file.*;
+import java.util.HashMap;
 
 public class App {
     public static void main(String[] args) { new App().readFromFile(); }
 
     private void readFromFile() {
-        Items item = new Items();
+        HashMap<String, Fruit> items = new HashMap<>();
         
-        try {
+        try {            
             Files.readAllLines(Paths.get(System.getProperty("user.dir")+"/src/main/resources/items"), StandardCharsets.UTF_8)
-                .forEach(item::incrementQty);
-            item.displayTotals();
+                .forEach(e-> {
+                    if(items.containsKey(e)) {
+                        items.get(e).incrementQty();
+                    } else {
+                        items.put(e, new Fruit(e));
+                    }
+                });
+
+            items.entrySet()
+                .stream()
+                .forEach(e -> {
+                    e.getValue().calculatePrice();
+                    e.getValue().printData();
+                });
+
+            double totalPrice = items.entrySet()
+                                    .stream()
+                                    .map(e->e.getValue().subTotal)
+                                    .mapToDouble(Double::doubleValue)
+                                    .sum();
+            
+            System.out.println(String.format("Total Price: $%s", String.format("%.2f", totalPrice)));
         } catch (IOException e) {
             e.printStackTrace();
         }

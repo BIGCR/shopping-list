@@ -1,17 +1,12 @@
 package shopping.list;
 
-public interface Item {
+public abstract class Item {
+    protected String name;
+    protected double price;
+    protected double subTotal;
+    protected boolean isDiscounted;
 
-    default double calculatePrice(double price, int quantity, boolean discount) {
-        double totalPrice = 0;
+    public abstract void calculatePrice();
 
-        if (discount) {
-            int freeItemQty = quantity / 3 ;
-            int qtyToChargeFor = quantity - freeItemQty;
-            totalPrice = price * qtyToChargeFor;
-        } else {
-            totalPrice = quantity * price;
-        }
-        return totalPrice;
-    }
+    public abstract void printData();
 }
