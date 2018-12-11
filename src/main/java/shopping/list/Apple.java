@@ -1,20 +1,19 @@
 package shopping.list;
 
-// public class Apple implements Item {
-//     private static final double PRICE = .25;
-//     private static final boolean IS_DISCOUNTED = false;
+public class Apple implements Item {
 
-//     private int qty;
+    @Override
+    public double calculatePrice(double price, int quantity, boolean discount) {
+        double totalPrice = 0;
 
-//     public void incrementQty() {
-//         this.qty = this.qty++;
-//     }
+        if (discount) {
+            int freeItemQty = quantity / 3 ;
+            int qtyToChargeFor = quantity - freeItemQty;
+            totalPrice = price * qtyToChargeFor;
+        } else {
+            totalPrice = quantity * price;
+        }
+        return totalPrice;
+    }
 
-//     public int getQty() {
-//         return this.qty;
-//     }
-
-//     public double getSubtotal() {
-//         return calculatePrice(this.PRICE, this.getQty(), this.IS_DISCOUNTED);
-//     }
-// }
+}

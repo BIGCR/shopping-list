@@ -3,29 +3,21 @@
  */
 package shopping.list;
 
-import java.io.*;
-import java.util.List; 
-import java.util.Collections;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets; 
 import java.nio.file.*; 
 
 public class App {
-    public static void main(String[] args) {
-        App app = new App();
-        app.readFromFile();
-    }
+    public static void main(String[] args) { new App().readFromFile(); }
 
     private void readFromFile() {
-        List<String> lines = Collections.emptyList();
-        Item item = new Item();
+        Items item = new Items();
         
         try {
-            lines = Files.readAllLines(Paths.get(System.getProperty("user.dir")+"/src/main/resources/items"), StandardCharsets.UTF_8);
-            lines.stream().forEach(item::incrementQty);
+            Files.readAllLines(Paths.get(System.getProperty("user.dir")+"/src/main/resources/items"), StandardCharsets.UTF_8)
+                .forEach(item::incrementQty);
             item.displayTotals();
-            
-            System.out.println(item);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
