@@ -9,13 +9,13 @@ import java.nio.file.*;
 import java.util.HashMap;
 
 public class App {
-    public static void main(String[] args) { new App().readFromFile(); }
+    public static void main(String[] args) { new App().readFromFile("/src/main/resources/items"); }
 
-    private void readFromFile() {
+    public HashMap<String, Fruit> readFromFile(String directory) {
         HashMap<String, Fruit> items = new HashMap<>();
 
         try {            
-            Files.readAllLines(Paths.get(System.getProperty("user.dir")+"/src/main/resources/items"), StandardCharsets.UTF_8)
+            Files.readAllLines(Paths.get(System.getProperty("user.dir")+directory), StandardCharsets.UTF_8)
                 .forEach(e-> {
                     if(items.containsKey(e)) {
                         items.get(e).incrementQty();
@@ -25,25 +25,27 @@ public class App {
                 });
 
             items.entrySet()
-                .stream()
                 .forEach(e -> {
                     e.getValue().calculatePrice();
                     e.getValue().printData();
                 });
 
-            calculateAndDisplayTotal(items);
+                System.out.println(String.format("Total Price: $%s", formatDouble(calculateTotal(items))));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return items;
     }
 
-    private void calculateAndDisplayTotal(HashMap<String, Fruit> items) {
-        double totalPrice = items.entrySet()
-                                    .stream()
-                                    .map(e->e.getValue().subTotal)
-                                    .mapToDouble(Double::doubleValue)
-                                    .sum();
-        
-        System.out.println(String.format("Total Price: $%s", String.format("%.2f", totalPrice)));
+    public double calculateTotal(HashMap<String, Fruit> items) {
+        return items.entrySet()
+                    .stream()
+                    .map(e->e.getValue().subTotal)
+                    .mapToDouble(Double::doubleValue)
+                    .sum();
+    }
+
+    public static String formatDouble(double value) {
+        return String.format("%.2f", value);
     }
 }

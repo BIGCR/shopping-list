@@ -1,6 +1,7 @@
 package shopping.list;
 
 import static shopping.list.Constants.*;
+import static shopping.list.App.formatDouble;
 
 public class Fruit extends Item {
     private int qty;
@@ -24,7 +25,8 @@ public class Fruit extends Item {
                 break;
             default:
                 System.out.println("Invalid Item");
-                return;
+                price = INVALID_ITEM_PRICE;
+                break;
         }
         this.name = fruitName;
         this.price = price;
@@ -45,7 +47,7 @@ public class Fruit extends Item {
         this.subTotal = subTotal;
     }
 
-    public void printData() { System.out.println(String.format("%s ($%s/each): $%s", this.name, String.format("%.2f", this.price), String.format("%.2f", this.subTotal))); }
+    public void printData() { System.out.println(String.format("%s ($%s/each): $%s", this.name, formatDouble(this.price), formatDouble(this.subTotal))); }
     
     public int getQty() { return this.qty; }
 
