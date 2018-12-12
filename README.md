@@ -9,10 +9,11 @@ Software Engineer Test
 * Items can only be added and not removed from the list
 
 ### Build
-The program can be build by running `./gradlew build`. This will generate an html file with the test results lated in `build/reports/tests/test/index.html`
+The application was build using gradle version `5.0`.
+The program can be build by running `gradle build`. This will generate an html file with the test results lated in `build/reports/tests/test/index.html`
 
 ### Run
-Once the program is built, you can launch the application by running `./gradlew run`
+Once the program is built, you can launch the application by running `gradle run`. The output should display in the terminal. Replacing the content of the `items` file located at `src/main/resources/` will allow you to test different scenarios. 
 
 ### Enhancements
 If given more time: 

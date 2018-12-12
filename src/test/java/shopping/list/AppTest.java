@@ -33,6 +33,7 @@ public class AppTest {
         App classUnderTest = new App();
         HashMap<String, Fruit> items = classUnderTest.readFromFile("/src/test/resources/emptyList");
         assertNotNull(classUnderTest);
+        assertNotNull(items);
     }
 
     @Test public void testListWithBlankItems() {
