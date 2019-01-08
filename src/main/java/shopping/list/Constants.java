@@ -1,14 +1,24 @@
 package shopping.list;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constants {
     public static final String APPLE = "Apple";
     public static final String ORANGE = "Orange";
     public static final String BANANA = "Banana";
     public static final String PAPAYA = "Papaya";
 
-    public static final double APPLE_PRICE = .25;
-    public static final double ORANGE_PRICE = .30;
-    public static final double BANANA_PRICE = .15;
-    public static final double PAPAYA_PRICE = .50;
-    public static final double INVALID_ITEM_PRICE = 0.0;
+    public static final Double APPLE_PRICE = .25;
+    public static final Double ORANGE_PRICE = .30;
+    public static final Double BANANA_PRICE = .15;
+    public static final Double PAPAYA_PRICE = .50;
+    public static final Double INVALID_ITEM_PRICE = 0.0;
+
+    public static final Map<String, Double> fruitPrices = new HashMap<>(){{
+        put(APPLE, APPLE_PRICE);
+        put(ORANGE, ORANGE_PRICE);
+        put(BANANA, BANANA_PRICE);
+        put(PAPAYA, PAPAYA_PRICE);
+    }};
 }

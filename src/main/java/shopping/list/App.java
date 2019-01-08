@@ -26,7 +26,7 @@ public class App {
 
             items.entrySet()
                 .forEach(e -> {
-                    e.getValue().calculatePrice();
+                    e.getValue().calculatePrice(e.getValue().getItemPrice);
                     e.getValue().printData();
                 });
 
