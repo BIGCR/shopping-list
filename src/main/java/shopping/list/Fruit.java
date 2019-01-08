@@ -1,11 +1,8 @@
 package shopping.list;
 
-import static shopping.list.Constants.*;
+import static shopping.list.App.formatDouble;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-
-import static shopping.list.App.formatDouble;
 
 public class Fruit extends Item {
     private int qty;
@@ -15,18 +12,6 @@ public class Fruit extends Item {
         this.subTotal = 0;
         this.qty = 1;
     }
-
-    
-    public Function<String, Double> getItemPrice = fruitName -> {
-        Double itemPrice = 0.0;
-        if (Constants.fruitPrices.containsKey(fruitName)) {
-            itemPrice = Constants.fruitPrices.get(fruitName);
-        } else {
-            System.out.println("Invalid item!");
-        }
-
-        return itemPrice;
-    };
 
     public void calculatePrice(Function<String, Double> function) { 
         double subTotal = 0;
@@ -40,6 +25,17 @@ public class Fruit extends Item {
         }
         this.subTotal = subTotal;
     }
+
+    public static Function<String, Double> getItemPrice = fruitName -> {
+        Double itemPrice = 0.0;
+        if (Constants.fruitPrices.containsKey(fruitName)) {
+            itemPrice = Constants.fruitPrices.get(fruitName);
+        } else {
+            System.out.println("Invalid item!");
+        }
+
+        return itemPrice;
+    };
     
     public void printData() { System.out.println(String.format("%s ($%s/each): $%s", this.name, formatDouble(this.price), formatDouble(this.subTotal))); }
     

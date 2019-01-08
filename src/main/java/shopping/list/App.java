@@ -4,12 +4,18 @@
 package shopping.list;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets; 
-import java.nio.file.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map.Entry;
+
+import com.google.common.base.Predicate;
 
 public class App {
     public static void main(String[] args) { new App().readFromFile("/src/main/resources/items"); }
+
+    public static Predicate<Entry<String, Fruit>> isValidItem = e -> Constants.fruitPrices.containsKey(e.getKey());
 
     public HashMap<String, Fruit> readFromFile(String directory) {
         HashMap<String, Fruit> items = new HashMap<>();
@@ -25,6 +31,8 @@ public class App {
                 });
 
             items.entrySet()
+                .stream()
+                .filter(isValidItem)
                 .forEach(e -> {
                     e.getValue().calculatePrice(e.getValue().getItemPrice);
                     e.getValue().printData();
