@@ -44,8 +44,12 @@ public class Fruit extends Item {
     
     public static BiFunction<String, Long, Fruit> convertToFruitList = 
     (name, qty) -> {
-        return new Fruit(name, qty.intValue());
+         return new Fruit(name, qty.intValue());
     };
+
+    public static Fruit ConvertMapEntryToFruit(Entry<String, Long> entry) {
+        return new Fruit(entry.getKey(), entry.getValue().intValue());
+    }
 
     public static Function<String, Double> getItemPrice = fruitName -> {
         Double itemPrice = 0.0;

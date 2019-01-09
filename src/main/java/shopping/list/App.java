@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -18,14 +19,15 @@ public class App {
         new App().readFromFile("/src/main/resources/items");
     }
 
-    public static void readFromFile(String directory) {
+    public void readFromFile(String directory) {
+        BinaryOperator<Double> sumValues = (c, e) -> c + e;
         try {            
             Files.readAllLines(Paths.get(System.getProperty("user.dir")+directory), StandardCharsets.UTF_8)
                 .stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .entrySet()
                 .stream()
-                .map(e -> Fruit.convertToFruitList.apply(e.getKey(), e.getValue()))
+                .map(Fruit::ConvertMapEntryToFruit)
                 .map(fruit -> {
                     fruit.price = Fruit.getItemPrice.apply(fruit.name);
                     Double subtotal = fruit.retriveCalculationFunction.apply(fruit.name).apply(fruit);
@@ -35,7 +37,7 @@ public class App {
                 // .peek(LambdaUtils.printBaseItemInfo)
                 .peek(fruit -> fruit.printSubtotal.accept(fruit))
                 .map(e -> e.subTotal)
-                .reduce((a, b) -> a + b)
+                .reduce(sumValues)
                 .ifPresent(printGrandTotal);
             
         } catch (IOException e) {
@@ -43,7 +45,7 @@ public class App {
         }
     }
 
-    public static Consumer<Double> printGrandTotal = grandTotal -> {
+    public Consumer<Double> printGrandTotal = grandTotal -> {
         System.out.println(String.format("Grand Total: $%s", LambdaUtils.formatDouble.apply(grandTotal)));
     };
 }
