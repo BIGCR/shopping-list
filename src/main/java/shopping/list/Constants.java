@@ -2,6 +2,8 @@ package shopping.list;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
+import shopping.list.Item;;
 
 public class Constants {
     public static final String APPLE = "Apple";
@@ -14,11 +16,4 @@ public class Constants {
     public static final Double BANANA_PRICE = .15;
     public static final Double PAPAYA_PRICE = .50;
     public static final Double INVALID_ITEM_PRICE = 0.0;
-
-    public static final Map<String, Double> fruitPrices = new HashMap<>(){{
-        put(APPLE, APPLE_PRICE);
-        put(ORANGE, ORANGE_PRICE);
-        put(BANANA, BANANA_PRICE);
-        put(PAPAYA, PAPAYA_PRICE);
-    }};
 }

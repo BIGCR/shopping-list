@@ -8,52 +8,42 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.Map.Entry;
-
-import com.google.common.base.Predicate;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class App {
-    public static void main(String[] args) { new App().readFromFile("/src/main/resources/items"); }
+    public static void main(String[] args) {
+        new App().readFromFile("/src/main/resources/items");
+    }
 
-    public static Predicate<Entry<String, Fruit>> isValidItem = e -> Constants.fruitPrices.containsKey(e.getKey());
-
-    public HashMap<String, Fruit> readFromFile(String directory) {
-        HashMap<String, Fruit> items = new HashMap<>();
-
+    public static void readFromFile(String directory) {
         try {            
             Files.readAllLines(Paths.get(System.getProperty("user.dir")+directory), StandardCharsets.UTF_8)
-                .forEach(e-> {
-                    if(items.containsKey(e)) {
-                        items.get(e).incrementQty();
-                    } else {
-                        items.put(e, new Fruit(e));
-                    }
-                });
-
-            items.entrySet()
                 .stream()
-                .filter(isValidItem)
-                .forEach(e -> {
-                    e.getValue().calculatePrice(e.getValue().getItemPrice);
-                    e.getValue().printData();
-                });
-
-                System.out.println(String.format("Total Price: $%s", formatDouble(calculateTotal(items))));
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet()
+                .stream()
+                .map(e -> Fruit.convertToFruitList.apply(e.getKey(), e.getValue()))
+                .map(fruit -> {
+                    fruit.price = Fruit.getItemPrice.apply(fruit.name);
+                    Double subtotal = fruit.retriveCalculationFunction.apply(fruit.name).apply(fruit);
+                    fruit.subTotal = subtotal;
+                    return fruit;
+                })
+                // .peek(LambdaUtils.printBaseItemInfo)
+                .peek(fruit -> fruit.printSubtotal.accept(fruit))
+                .map(e -> e.subTotal)
+                .reduce((a, b) -> a + b)
+                .ifPresent(printGrandTotal);
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return items;
     }
 
-    public double calculateTotal(HashMap<String, Fruit> items) {
-        return items.entrySet()
-                    .stream()
-                    .map(e->e.getValue().subTotal)
-                    .mapToDouble(Double::doubleValue)
-                    .sum();
-    }
-
-    public static String formatDouble(double value) {
-        return String.format("%.2f", value);
-    }
+    public static Consumer<Double> printGrandTotal = grandTotal -> {
+        System.out.println(String.format("Grand Total: $%s", LambdaUtils.formatDouble.apply(grandTotal)));
+    };
 }
